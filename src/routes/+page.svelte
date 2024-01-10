@@ -1,10 +1,20 @@
 <script>
+	import ColorButton from '$lib/components/ColorButton.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import namedColors from 'color-name-list';
+	import Values from 'values.js';
 
 	let colorValue = '#ffffff';
 	let levelsValue = 10;
 	let colorName = 'White';
+	let color = new Values(colorValue);
+	let shades = color.shades(levelsValue);
+	let tints = color.tints(levelsValue).reverse();
+
+	$: {
+		shades = color.shades(levelsValue);
+		tints = color.tints(levelsValue).reverse();
+	}
 </script>
 
 <div class="flex flex-col gap-6 px-4 py-8">
@@ -25,6 +35,11 @@
 				maxlength="7"
 				on:input={() =>
 					(colorValue = namedColors.find((x) => x.hex === colorValue)?.name ?? colorName)}
+				on:keydown={(e) => {
+					if (e.key === 'Enter') {
+						color = new Values(colorValue);
+					}
+				}}
 			/>
 			<p class="font-semibold">
 				Levels: <input
@@ -37,23 +52,14 @@
 			</p>
 		</div>
 	</div>
-	<div class="flex flex-wrap justify-center gap-3">
-		<button
-			class="color-item-hovered flex flex-col gap-3 rounded-lg border border-neutral-300 bg-white p-4 text-xs text-neutral-700"
-			>100 <span class=" text-base text-neutral-900">#FFFFFF</span></button
-		>
-		<button
-			class="color-item-hovered flex flex-col gap-3 rounded-lg border border-neutral-300 bg-white p-4 text-xs text-neutral-700"
-			>100 <span class=" text-base text-neutral-900">#FFFFFF</span></button
-		>
-		<button
-			class="color-item-hovered flex flex-col gap-3 rounded-lg border border-neutral-300 bg-white p-4 text-xs text-neutral-700"
-			>100 <span class=" text-base text-neutral-900">#FFFFFF</span></button
-		>
-		<button
-			class="color-item-hovered flex flex-col gap-3 rounded-lg border border-neutral-300 bg-white p-4 text-xs text-neutral-700"
-			>100 <span class=" text-base text-neutral-900">#FFFFFF</span></button
-		>
+	<div class="grid grid-cols-3 justify-center gap-3">
+		{#each tints as tint}
+			<ColorButton color={tint} weight={tint.weight}></ColorButton>
+		{/each}
+		<ColorButton {color} weight={0}></ColorButton>
+		{#each shades as shade}
+			<ColorButton color={shade} weight={shade.weight}></ColorButton>
+		{/each}
 	</div>
 </div>
 
@@ -65,13 +71,5 @@
 			11px 12px 10px 0px rgba(0, 0, 0, 0.05),
 			19px 22px 12px 0px rgba(0, 0, 0, 0.01),
 			30px 34px 13px 0px rgba(0, 0, 0, 0);
-	}
-	.color-item-hovered:hover {
-		box-shadow:
-			1px 1px 3px 0px rgba(0, 0, 0, 0.1),
-			5px 2px 5px 0px rgba(0, 0, 0, 0.09),
-			11px 5px 7px 0px rgba(0, 0, 0, 0.05),
-			20px 10px 9px 0px rgba(0, 0, 0, 0.01),
-			31px 15px 10px 0px rgba(0, 0, 0, 0);
 	}
 </style>

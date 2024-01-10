@@ -38,6 +38,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"color-name-list": "^10.19.0"
+		"color-name-list": "^10.19.0",
+		"values.js": "^2.1.1"
 	}
 }
