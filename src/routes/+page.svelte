@@ -1,7 +1,7 @@
 <script lang="ts">
+	import type { Palette } from '$lib';
 	import ColorButton from '$lib/components/ColorButton.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
-	import namedColors from 'color-name-list';
 	import Values from 'values.js';
 
 	let colorValue = '#ffffff';
@@ -16,6 +16,25 @@
 	$: {
 		shades = color.shades(levelsValue);
 		tints = color.tints(levelsValue).reverse();
+		getColorName(color.hex).then((x) => {
+			colorName = x.paletteTitle;
+		});
+	}
+
+	async function getColorName(value: string): Promise<Palette> {
+		const apiUrl = `https://api.color.pizza/v1/?values=${value}&list=bestOf`;
+
+		try {
+			const response = await fetch(apiUrl);
+
+			if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+			const data = await response.json();
+			return data;
+		} catch (error) {
+			console.error('Error fetching data:', error);
+			throw error;
+		}
 	}
 </script>
 
@@ -42,32 +61,25 @@
 				color = new Values(v);
 			}}
 		/>
-		<div class="flex flex-col gap-3 text-neutral-900">
+		<div class="flex w-min flex-col gap-3 text-neutral-900 dark:text-neutral-100">
 			<p class="text-sm">{colorName}</p>
 			<input
-				class="w-min p-1 text-xl"
+				class="w-min p-1 text-xl text-neutral-900"
 				bind:value={colorValue}
 				size="5"
 				type="text"
 				maxlength="7"
 				on:input={(e) =>
 					(color = e?.target?.value.length === 7 ? new Values(e?.target?.value) : color)}
-				on:keydown={(e) => {
-					if (e.key === 'Enter') {
-						color = new Values(colorValue);
-					}
-				}}
 			/>
 			<p class="font-semibold">
 				Levels: <input
-					class="w-min text-center font-normal"
+					class="w-min text-center font-normal text-neutral-900"
 					size="1"
 					maxlength="3"
 					type="text"
 					bind:value={levelsValue}
-					on:input={(e) => {
-						levelsValue = Number(e?.target?.value);
-					}}
+					on:input={(e) => (levelsValue = Number(e?.target?.value))}
 				/>
 			</p>
 		</div>

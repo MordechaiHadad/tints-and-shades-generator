@@ -11,6 +11,7 @@
 		? 'text-neutral-300'
 		: 'text-neutral-700'}"
 	style="background-color: {color.hexString()};"
+    on:click={async () => await navigator.clipboard.writeText(color.hexString())}
 	>{weight}
 	<span class="text-base {color.getBrightness() <= 50 ? 'text-neutral-100' : 'text-neutral-900'}"
 		>{color.hex}</span
