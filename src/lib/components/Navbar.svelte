@@ -23,7 +23,7 @@
 	<div class="gap-3 border-neutral-300 pl-4 dark:border-neutral-700 hidden md:flex text-2xl">
 		<Button
 			title="Go to github repository"
-			callback={() => goto('https://github.com/MordechaiHadad/svelte-complete')}
+			callback={async () => await goto('https://github.com/MordechaiHadad/svelte-complete')}
 			icon="ti ti-brand-github"
 		></Button>
 		<Button
