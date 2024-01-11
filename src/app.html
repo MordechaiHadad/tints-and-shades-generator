@@ -1,3 +1,8 @@
+<script>
+	const isDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+	document.documentElement.classList.toggle('dark', isDarkTheme);
+</script>
+
 <!doctype html>
 <html lang="en">
 	<head>
@@ -9,7 +14,7 @@
 		/>
 		<link
 			rel="stylesheet"
-			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"
+			href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"
 		/>
 		<meta charset="utf-8" />
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" />

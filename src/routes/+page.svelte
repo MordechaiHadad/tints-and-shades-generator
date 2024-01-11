@@ -1,9 +1,14 @@
 <script lang="ts">
-	import type { Palette } from '$lib';
+	import { ThemeHandler, type Palette } from '$lib';
+	import ButtonsModal from '$lib/components/ButtonsModal.svelte';
 	import ColorButton from '$lib/components/ColorButton.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
+	import { onMount } from 'svelte';
 	import Values from 'values.js';
 
+	let themeHandler: ThemeHandler;
+	let isButtonModalShown = false;
+	let darkThemeButton: HTMLButtonElement;
 	let colorValue = '#ffffff';
 	let levelsValue: number = 10;
 	let colorName = 'White';
@@ -36,20 +41,27 @@
 			throw error;
 		}
 	}
+
+	onMount(() => {
+		const isDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+		darkThemeButton = document.getElementById('theme-button')! as HTMLButtonElement;
+		themeHandler = new ThemeHandler(isDarkTheme, darkThemeButton);
+	});
 </script>
 
-<div class="flex flex-col gap-6 px-4 py-8">
-	<Navbar></Navbar>
+<div class="flex flex-col gap-6 py-4 px-8 text-neutral-900 dark:text-neutral-100">
+	{#if isButtonModalShown}
+		<ButtonsModal bind:isButtonModalShown {themeHandler}></ButtonsModal>
+	{/if}
+	<Navbar {themeHandler} bind:isButtonModalShown></Navbar>
 	<div class="flex items-center justify-center gap-4">
 		<button
-			class="material-symbols-outlined color-box rounded-md {color.getBrightness() <= 50
+			class="ti ti-color-picker text-2xl color-box rounded-md {color.getBrightness() <= 50
 				? 'text-neutral-300'
-				: 'text-neutral-700'} h-full px-9 py-7"
+				: 'text-neutral-700'} h-full px-9 py-7 transition-all duration-200 ease-in-out"
 			style="background-color: {color.hexString()};"
 			on:click={() => colorPicker.click()}
-		>
-			colorize
-		</button>
+		/>
 		<input
 			type="color"
 			bind:this={colorPicker}
