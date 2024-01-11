@@ -60,6 +60,7 @@
 				? 'text-neutral-300'
 				: 'text-neutral-700'} h-full px-9 py-7 transition-all duration-200 ease-in-out"
 			style="background-color: {color.hexString()};"
+			title="Open color picker"
 			on:click={() => colorPicker.click()}
 		/>
 		<input
