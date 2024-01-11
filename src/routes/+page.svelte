@@ -17,13 +17,17 @@
 	let tints = color.tints(levelsValue).reverse();
 	let colorPicker: HTMLInputElement;
 	let colorPickerValue = '';
+	let intialized = false;
 
 	$: {
 		shades = color.shades(levelsValue);
 		tints = color.tints(levelsValue).reverse();
-		getColorName(color.hex).then((x) => {
-			colorName = x.paletteTitle;
-		});
+
+		if (intialized) {
+			getColorName(color.hex).then((x) => {
+				colorName = x.paletteTitle;
+			});
+		}
 	}
 
 	async function getColorName(value: string): Promise<Palette> {
@@ -46,17 +50,18 @@
 		const isDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
 		darkThemeButton = document.getElementById('theme-button')! as HTMLButtonElement;
 		themeHandler = new ThemeHandler(isDarkTheme, darkThemeButton);
+		intialized = true;
 	});
 </script>
 
-<div class="flex flex-col gap-6 py-4 px-8 text-neutral-900 dark:text-neutral-100">
+<div class="flex flex-col gap-6 px-4 md:px-8 py-4 text-neutral-900 dark:text-neutral-100">
 	{#if isButtonModalShown}
 		<ButtonsModal bind:isButtonModalShown {themeHandler}></ButtonsModal>
 	{/if}
 	<Navbar {themeHandler} bind:isButtonModalShown></Navbar>
 	<div class="flex items-center justify-center gap-4">
 		<button
-			class="ti ti-color-picker text-2xl color-box rounded-md {color.getBrightness() <= 50
+			class="ti ti-color-picker color-box rounded-md text-2xl {color.getBrightness() <= 50
 				? 'text-neutral-300'
 				: 'text-neutral-700'} h-full px-9 py-7 transition-all duration-200 ease-in-out"
 			style="background-color: {color.hexString()};"
