@@ -20,8 +20,10 @@
 	let intialized = false;
 
 	$: {
-		shades = color.shades(levelsValue);
-		tints = color.tints(levelsValue).reverse();
+		if (levelsValue > 0) {
+			shades = color.shades(levelsValue);
+			tints = color.tints(levelsValue).reverse();
+		}
 
 		if (intialized) {
 			getColorName(color.hex).then((x) => {
@@ -54,7 +56,7 @@
 	});
 </script>
 
-<div class="flex flex-col gap-6 px-4 md:px-8 py-4 text-neutral-900 dark:text-neutral-100">
+<div class="flex flex-col gap-6 px-4 py-4 text-neutral-900 dark:text-neutral-100 md:px-8">
 	{#if isButtonModalShown}
 		<ButtonsModal bind:isButtonModalShown {themeHandler}></ButtonsModal>
 	{/if}
@@ -82,7 +84,8 @@
 		<div class="flex w-min flex-col gap-3 text-neutral-900 dark:text-neutral-100">
 			<p class="text-sm">{colorName}</p>
 			<input
-				class="w-min p-1 text-xl text-neutral-900"
+				class="p-1 text-xl text-neutral-900"
+				style:width="7ch"
 				bind:value={colorValue}
 				size="5"
 				type="text"
@@ -90,16 +93,18 @@
 				on:input={(e) =>
 					(color = e?.target?.value.length === 7 ? new Values(e?.target?.value) : color)}
 			/>
-			<p class="font-semibold">
-				Levels: <input
-					class="w-min text-center font-normal text-neutral-900"
+			<div class="flex" style:gap="1ch">
+				<p class="font-semibold">Levels:</p>
+				<input
+					class="text-center font-normal text-neutral-900"
+					style:width="3ch"
 					size="1"
 					maxlength="3"
 					type="text"
 					bind:value={levelsValue}
 					on:input={(e) => (levelsValue = Number(e?.target?.value))}
 				/>
-			</p>
+			</div>
 		</div>
 	</div>
 	<div class="grid grid-cols-3 justify-center gap-3 md:grid-cols-6">
