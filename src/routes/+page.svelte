@@ -82,7 +82,7 @@
 		<div class="flex w-min flex-col gap-3 text-neutral-900 dark:text-neutral-100">
 			<p class="text-sm">{colorName}</p>
 			<input
-				class="w-full p-1 text-xl text-neutral-900"
+				class="w-full p-1 text-xl text-neutral-900 rounded-md border border-neutral-400"
 				bind:value={colorValueHex}
 				size="5"
 				type="text"
@@ -91,7 +91,7 @@
 			<div class="flex" style:gap="1ch">
 				<p class="font-semibold">Levels:</p>
 				<input
-					class="text-center font-normal text-neutral-900"
+					class="text-center font-normal text-neutral-900 rounded-md border border-neutral-400"
 					style:width="3ch"
 					size="1"
 					maxlength="3"
