@@ -14,7 +14,7 @@
 	/>
 
 	<!-- Modal content -->
-	<div class="absolute top-10">
+	<div class="relative top-10 md:right-32">
 		<ColorPicker
 			bind:hex={value}
 			components={ChromeVariant}
