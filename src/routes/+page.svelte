@@ -2,6 +2,7 @@
 	import { ThemeHandler, type Palette } from '$lib';
 	import ButtonsModal from '$lib/components/ButtonsModal.svelte';
 	import ColorButton from '$lib/components/ColorButton.svelte';
+	import ColorPickerModal from '$lib/components/ColorPickerModal.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import { onMount } from 'svelte';
 	import Values from 'values.js';
@@ -9,17 +10,17 @@
 	let themeHandler: ThemeHandler;
 	let isButtonModalShown = false;
 	let darkThemeButton: HTMLButtonElement;
-	let colorValue = '#ffffff';
+	let colorValueHex = '#ffffff';
 	let levelsValue: number = 10;
 	let colorName = 'White';
-	let color = new Values(colorValue);
+	let color = new Values(colorValueHex);
 	let shades = color.shades(levelsValue);
 	let tints = color.tints(levelsValue).reverse();
-	let colorPicker: HTMLInputElement;
-	let colorPickerValue = '';
 	let intialized = false;
+	let isColorPickerOpen = false;
 
 	$: {
+		color = colorValueHex.length === 7 ? new Values(colorValueHex) : color;
 		if (levelsValue > 0) {
 			shades = color.shades(levelsValue);
 			tints = color.tints(levelsValue).reverse();
@@ -60,6 +61,10 @@
 	{#if isButtonModalShown}
 		<ButtonsModal bind:isButtonModalShown {themeHandler}></ButtonsModal>
 	{/if}
+	{#if isColorPickerOpen}
+		<ColorPickerModal {themeHandler} bind:value={colorValueHex} bind:isOpen={isColorPickerOpen}
+		></ColorPickerModal>
+	{/if}
 	<Navbar {themeHandler} bind:isButtonModalShown></Navbar>
 	<div class="flex items-center justify-center gap-4">
 		<button
@@ -68,30 +73,20 @@
 				: 'text-neutral-700'} h-full px-9 py-7 transition-all duration-200 ease-in-out"
 			style="background-color: {color.hexString()};"
 			title="Open color picker"
-			on:click={() => colorPicker.click()}
-		/>
-		<input
-			type="color"
-			bind:this={colorPicker}
-			class="hidden"
-			bind:value={colorPickerValue}
-			on:change={(e) => {
-				const v = e?.target?.value;
-				colorValue = v;
-				color = new Values(v);
+			on:click={() => {
+				isColorPickerOpen = !isColorPickerOpen;
+				console.log(isColorPickerOpen);
 			}}
 		/>
+
 		<div class="flex w-min flex-col gap-3 text-neutral-900 dark:text-neutral-100">
 			<p class="text-sm">{colorName}</p>
 			<input
-				class="p-1 text-xl text-neutral-900"
-				style:width="7ch"
-				bind:value={colorValue}
+				class="w-full p-1 text-xl text-neutral-900"
+				bind:value={colorValueHex}
 				size="5"
 				type="text"
 				maxlength="7"
-				on:input={(e) =>
-					(color = e?.target?.value.length === 7 ? new Values(e?.target?.value) : color)}
 			/>
 			<div class="flex" style:gap="1ch">
 				<p class="font-semibold">Levels:</p>
