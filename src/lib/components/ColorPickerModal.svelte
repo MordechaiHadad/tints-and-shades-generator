@@ -24,3 +24,9 @@
 		/>
 	</div>
 </div>
+
+<style>
+	:global(.input-container) {
+		background-color: white;
+	}
+</style>

@@ -82,7 +82,7 @@
 		<div class="flex w-min flex-col gap-3 text-neutral-900 dark:text-neutral-100">
 			<p class="text-sm">{colorName}</p>
 			<input
-				class="w-full p-1 text-xl text-neutral-900 rounded-md border border-neutral-400"
+				class="w-full rounded-md border border-neutral-400 p-1 px-2 text-xl text-neutral-900"
 				bind:value={colorValueHex}
 				size="5"
 				type="text"
@@ -91,7 +91,7 @@
 			<div class="flex" style:gap="1ch">
 				<p class="font-semibold">Levels:</p>
 				<input
-					class="text-center font-normal text-neutral-900 rounded-md border border-neutral-400"
+					class="rounded-md border border-neutral-400 text-center font-normal text-neutral-900"
 					style:width="3ch"
 					size="1"
 					maxlength="3"
@@ -102,13 +102,17 @@
 			</div>
 		</div>
 	</div>
-	<div class="grid grid-cols-3 justify-center gap-3 md:grid-cols-6">
+	<div class="grid grid-cols-3 justify-center gap-3 md:grid-cols-12">
 		{#each tints as tint}
 			<ColorButton color={tint} weight={tint.weight}></ColorButton>
 		{/each}
 		<ColorButton {color} weight={0}></ColorButton>
-		{#each shades as shade}
-			<ColorButton color={shade} weight={shade.weight}></ColorButton>
+		{#each shades as shade, index}
+			<ColorButton
+				isLast={shades.length - index > 3 ? false : true}
+				color={shade}
+				weight={shade.weight}
+			></ColorButton>
 		{/each}
 	</div>
 </div>

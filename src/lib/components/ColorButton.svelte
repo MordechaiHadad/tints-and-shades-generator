@@ -3,13 +3,14 @@
 
 	export let color: Values;
 	export let weight: number;
+	export let isLast = false;
 </script>
 
 <button
 	class="color-item-hovered flex w-full flex-col gap-3 rounded-lg border border-neutral-300 p-4 text-xs {color.getBrightness() <=
 	50
 		? 'text-neutral-300'
-		: 'text-neutral-700'} transition-all duration-200 ease-in-out items-center"
+		: 'text-neutral-700'} transition-all duration-200 ease-in-out items-center {isLast === false ? "md:col-span-2" : "md:col-span-4"}  "
 	style="background-color: {color.hexString()};"
 	type="button"
 	on:click={async () => await navigator.clipboard.writeText(color.hexString())}
